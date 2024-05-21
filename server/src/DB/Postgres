@@ -105,11 +105,14 @@ const login = async (username, password) => {
     try {
         const usuario = await findByKey("usuario", "username", username);
         if (usuario.length === 0) {
+            console.log("Usuario no existe");
             throw { msg: "Usuario no existe", status: 401 };
         }
         if (usuario[0].password !== password) {
+            console.log("Usuario y/o contraseña incorrectos");
             throw { msg: "Usuario y/o contraseña incorrectos", status: 401 };
         }
+        console.log(`Login successfull usuario[0]: ${JSON.stringify(usuario[0].username)}`)
         return usuario[0];
     } catch (err) {
         throw err;
