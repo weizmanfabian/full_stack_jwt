@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
+import Swal from 'sweetalert2'
 
 const Login = () => {
     const [password, setPassword] = useState('');
@@ -29,11 +30,18 @@ const Login = () => {
                 //Cookies.set('accessToken', result.accessToken); // Guardar el token en las cookies
                 navigate('/app/home'); // Redirigir a la URL deseada
             } else {
-                console.error('Login fallido');
+                Swal.fire({
+                    title: 'Error!',
+                    text: result.body,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                  })
+                console.log(result.body);
             }
         })
         .catch(error => {
-            console.error(error);
+            console.error('Login fallido catch');
+            
         });
     };
 

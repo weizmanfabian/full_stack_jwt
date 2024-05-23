@@ -68,7 +68,7 @@ const generateTokenAndSaveCookies = (req, res, username) => {
 
     res.cookie('refreshToken', refreshToken, {
         maxAge: config.app.timeRefreshToken,
-        httpOnly: true, // Security best practice
+        //httpOnly: true, // Security best practice
         secure: true, // Ensure cookies are only sent over HTTPS
         sameSite: 'Strict' // Prevent CSRF attacks
     });
