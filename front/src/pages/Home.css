@@ -1,0 +1,16 @@
+/* Home.css */
+
+
+/* Estilos para el Sidebar fijo */
+#sidebarMenu {
+  position: fixed;
+  top: 56px; /* Altura del navbar */
+  bottom: 0;
+  left: 0;
+  /* z-index: 1020; Un poco menos que el navbar */
+  width: 250px; /* Ajusta el ancho según sea necesario */
+  padding-bottom: 1rem;
+  overflow-y: auto;
+}
+
+

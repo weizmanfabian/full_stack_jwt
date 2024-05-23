@@ -1,0 +1,29 @@
+/* Home.css */
+
+/* Estilos para el Navbar fijo */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1030; /* Bootstrap navbar z-index */
+}
+
+/* Estilos para el Sidebar fijo */
+#sidebarMenu {
+  position: fixed;
+  top: 56px; /* Altura del navbar */
+  bottom: 0;
+  left: 0;
+  z-index: 1020; /* Un poco menos que el navbar */
+  width: 250px; /* Ajusta el ancho según sea necesario */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  overflow-y: auto;
+}
+
+/* Estilos para el contenido principal */
+main {
+  margin-top: 56px; /* Altura del navbar */
+  margin-left: 250px; /* Ancho del sidebar */
+  padding: 1rem;
+}

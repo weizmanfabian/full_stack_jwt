@@ -1,11 +1,13 @@
-import './App.css';
+import React from 'react';
 import PrincipalRoute from './routes/PrincipalRoute';
+import { AuthProvider } from './context/AuthProvider';
 
-
-function App() {
+const App = () => {
   return (
-    <PrincipalRoute />
+    <AuthProvider>
+      <PrincipalRoute />
+    </AuthProvider>
   );
-}
+};
 
 export default App;

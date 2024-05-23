@@ -1,32 +1,44 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Index from '../pages/Index';
 import AplicationRoute from './AplicationRoute';
 import AuthRoute from './AuthRoute';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
-import { AuthProvider } from '../context/AuthProvider';
+import { useAuth } from '../context/AuthProvider';
+
+
 
 const PrincipalRoute = () => {
-    return (
-        <AuthProvider>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/auth/*" element={
-                        <PublicRoute>
-                            <AuthRoute />
-                        </PublicRoute>
-                    }/>
-                    <Route path="/app/*" element={
-                        <PrivateRoute>
-                            <AplicationRoute />
-                        </PrivateRoute>
-                    }/>
-                </Routes>
-            </BrowserRouter>
-        </AuthProvider>
-    );
+  const {timeIntervalRefreshToken, logout, checkAuthStatus } = useAuth();
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            const isUserLoggedIn = checkAuthStatus();
+            if (!isUserLoggedIn) {
+                logout();
+                clearInterval(intervalId);
+            }
+        }, timeIntervalRefreshToken);
+
+        return () => clearInterval(intervalId);
+    }, [checkAuthStatus, logout]);
+
+  return (
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/auth/*" element={
+        <PublicRoute>
+          <AuthRoute />
+        </PublicRoute>
+      } />
+      <Route path="/app/*" element={
+        <PrivateRoute>
+          <AplicationRoute />
+        </PrivateRoute>
+      } />
+    </Routes>
+  );
 };
 
 export default PrincipalRoute;
