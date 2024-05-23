@@ -7,7 +7,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, setTimeIntervalRefreshToken } = useAuth();
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -23,26 +23,27 @@ const Login = () => {
             body: JSON.stringify(data),
             credentials: 'include' // Esto asegura que las cookies se envíen con la solicitud
         })
-        .then(response => response.json())
-        .then(result => {
-            if (result.isLogged) {
-                login();
-                //Cookies.set('accessToken', result.accessToken); // Guardar el token en las cookies
-                navigate('/app/home'); // Redirigir a la URL deseada
-            } else {
-                Swal.fire({
-                    title: 'Error!',
-                    text: result.body,
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                  })
-                console.log(result.body);
-            }
-        })
-        .catch(error => {
-            console.error('Login fallido catch');
-            
-        });
+            .then(response => response.json())
+            .then(result => {
+                const { isLogged, timeRefreshToken, body } = result;
+                if (isLogged) {
+                    login();
+                    setTimeIntervalRefreshToken(timeRefreshToken)
+                    //Cookies.set('accessToken', result.accessToken); // Guardar el token en las cookies
+                    navigate('/app/home');
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: body,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    })
+                }
+            })
+            .catch(error => {
+                console.error('Login fallido catch');
+
+            });
     };
 
     return (
