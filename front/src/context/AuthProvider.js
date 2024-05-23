@@ -1,10 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
+export const nameCookieAccesshToken = 'accessToken';
 export const nameCookieRefreshToken = 'refreshToken';
-export const timeIntervalRefreshToken = 300000;
+const timeIntervalRefreshTokenInicial = 300000;
 
 function parseJwt(token) {
     try {
@@ -22,6 +23,7 @@ function parseJwt(token) {
 }
 
 export const AuthProvider = ({ children }) => {
+    const [timeIntervalRefreshToken, setTimeIntervalRefreshToken] = useState(timeIntervalRefreshTokenInicial);
     const [isLogged, setIsLogged] = useState(false);
     const navigate = useNavigate();
 
@@ -47,11 +49,12 @@ export const AuthProvider = ({ children }) => {
         setIsLogged(true);
     };
 
-    const logout = () => {
+    const logout = useCallback(() => {
         Cookies.remove(nameCookieRefreshToken);
+        Cookies.remove(nameCookieAccesshToken);
         setIsLogged(false);
         navigate('/auth/login');
-    };
+    }, [navigate]);
 
     useEffect(() => {
         checkAuthStatus();
@@ -64,10 +67,10 @@ export const AuthProvider = ({ children }) => {
         }, timeIntervalRefreshToken);
 
         return () => clearInterval(intervalId);
-    }, [navigate]);
+    }, [navigate, logout, timeIntervalRefreshToken]);
 
     return (
-        <AuthContext.Provider value={{timeIntervalRefreshToken, isLogged, login, logout, checkAuthStatus }}>
+        <AuthContext.Provider value={{ timeIntervalRefreshToken, isLogged, login, logout, checkAuthStatus, setTimeIntervalRefreshToken }}>
             {children}
         </AuthContext.Provider>
     );

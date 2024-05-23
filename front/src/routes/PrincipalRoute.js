@@ -22,7 +22,7 @@ const PrincipalRoute = () => {
         }, timeIntervalRefreshToken);
 
         return () => clearInterval(intervalId);
-    }, [checkAuthStatus, logout]);
+    }, [checkAuthStatus, logout, timeIntervalRefreshToken]);
 
   return (
     <Routes>

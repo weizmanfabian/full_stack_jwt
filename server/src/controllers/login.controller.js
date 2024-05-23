@@ -8,7 +8,7 @@ const signIn = (req, res) => {
     login(req.body.username, req.body.password)
         .then(response => {
             const { accessToken, refreshToken } = generateTokenAndSaveCookies(req, res, response.username)
-            res.status(200).send({ isLogged: true, msg: "Login Successful", accessToken, refreshToken });
+            res.status(200).send({ isLogged: true, msg: "Login Successful", accessToken, refreshToken, timeRefreshToken: config.app.timeRefreshToken });
         })
         .catch(({ msg, status }) => error(req, res, msg, status));
 };
